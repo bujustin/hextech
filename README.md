@@ -39,7 +39,7 @@ league: str
 #### Functions
 
 <pre>
-getMatches() -> Dict[str -> '<a href="https://github.com/bujustin/hextech#match-class">Match</a>']
+getMatches() -> Dict[str -> <a href="https://github.com/bujustin/hextech#match-class">Match</a>]
 </pre>
 
 ### Match Class
@@ -60,7 +60,7 @@ scores: Tuple(int, int)
 #### Functions
 
 <pre>
-getGames() -> List['<a href="https://github.com/bujustin/hextech#game-class">Game</a>']
+getGames() -> List[<a href="https://github.com/bujustin/hextech#game-class">Game</a>]
 </pre>
 
 ### Game Class
@@ -81,8 +81,8 @@ winner: int # corresponding with the index (zero-based) of the winning team
 teams: Tuple(str, str)
 bans: Tuple(str, str)
 scoreboard: [ 
-	List['<a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>'],
-	List['<a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>']
+	List[<a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>],
+	List[<a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>]
 ] 
 </pre>
 
@@ -94,7 +94,7 @@ Represents the stats for a given player for a specific game.
 
 <pre>
 _uniqueGame: str # for internal use
-player: '<a href="https://github.com/bujustin/hextech#player-class">Player</a>'
+player: <a href="https://github.com/bujustin/hextech#player-class">Player</a>
 
 role: str
 champion: str
