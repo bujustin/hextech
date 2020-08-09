@@ -5,39 +5,22 @@ from .consts import *
 
 
 """
-https://lol.gamepedia.com/Special:CargoTables/Tournaments
-https://lol.gamepedia.com/Special:CargoTables/ScoreboardPlayers
-https://lol.gamepedia.com/Special:CargoTables/ScoreboardGames
-https://lol.gamepedia.com/Special:CargoTables/MatchSchedule
-https://lol.gamepedia.com/Special:CargoTables/MatchScheduleGame
-https://lol.gamepedia.com/Special:CargoTables/PlayerImages
-https://www.mediawiki.org/wiki/Extension:Cargo/Querying_data
-
-https://towardsdatascience.com/how-to-use-riot-api-with-python-b93be82dbbd6 (data dragon)
-https://developer.riotgames.com/docs/lol#data-dragon
-
-https://ddragon.leagueoflegends.com/api/versions.json
-http://ddragon.leagueoflegends.com/cdn/10.16.1/img/champion/Aatrox.png
-
-
-Deploying
-https://python-packaging-tutorial.readthedocs.io/en/latest/setup_py.html
-https://betterscientificsoftware.github.io/python-for-hpc/tutorials/python-pypi-packaging/
-https://packaging.python.org/tutorials/packaging-projects/
+Params:
+    List of leagues to get tournaments from (e.g. LCS, LCK)
+Returns:
+    Dictionary of tournament names mapped to tournament objects
 """
-
-
 def getTournaments(leagues=DEFAULT_LEAGUES):
     url = TOURNAMENTS_URL.format(" OR ".join("L.League_Short='{}'".format(league) for league in leagues))
     tournamentsJson = requests.get(url).json()["cargoquery"]
 
-    tournaments = []
+    tournaments = {}
     for i in range(len(tournamentsJson)):
         tournamentJson = tournamentsJson[i]["title"]
         tournament = Tournament(tournamentJson["Name"])
         tournament.startDate = tournamentJson["DateStart"]
         tournament.league = tournamentJson["League Short"]
-        tournaments.append(tournament)
+        tournaments[tournamentJson["Name"]] = tournament
 
     return tournaments
 
@@ -84,7 +67,7 @@ class Match:
 
         self.dateTime = None
         self.teams = (None, None)
-        self.scores = (None, None)
+        self.scores = (0, 0)
 
     def __str__(self):
         return """{} {} {}-{} {}\n""".format(
@@ -107,7 +90,7 @@ class Match:
                 game.duration = gameJson["Gamelength"]
                 game.matchHistory = gameJson["MatchHistory"]
 
-                game.winner = int(gameJson["Winner"])
+                game.winner = int(gameJson["Winner"]) - 1
                 game.teams = (gameJson["Team1"], gameJson["Team2"])
                 game.bans = (gameJson["Team1Bans"], gameJson["Team2Bans"])
 
@@ -145,16 +128,16 @@ class Game:
         self.duration = None
         self.matchHistory = None
 
-        self.winner = 1
-        self.teams = None
-        self.bans = None
+        self.winner = 0
+        self.teams = (None, None)
+        self.bans = (None, None)
         self.scoreboard = [[None] * 5, [None] * 5]
 
     def __str__(self):
 
         return "\t{}: {} vs. {}\n\tWinner: {} in {}\n\t\t{}\n".format(
             self.gameName, self.teams[0], self.teams[1],
-            self.teams[self.winner - 1], self.duration,
+            self.teams[self.winner], self.duration,
             "\n\t\t".join([str(self.scoreboard[0][i])+"\t\t"+str(self.scoreboard[1][i]) for i in range(5)]))
 
 class Scoreline:

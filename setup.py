@@ -7,8 +7,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="Hextech",
-    version="0.0.1",
+    name="hextech",
+    version="1.0",
     author="bujustin",
     author_email="bujustin@gmail.com",
     description="A Python framework for accessing League of Legends esports data",
@@ -23,9 +23,3 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
 )
-
-"""
-Build and deploy
-Run setup: python setup.py sdist bdist_wheel
-Deploy to pypi: python -m twine upload --repository pypi dist/*
-"""
