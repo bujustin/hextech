@@ -81,8 +81,8 @@ winner: int # corresponding with the index (zero-based) of the winning team
 teams: Tuple(str, str)
 bans: Tuple(str, str)
 scoreboard: [ 
-	List[[Scoreline](#scoreline-class)],
-	List[[Scoreline](#scoreline-class)]
+	List['<a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>'],
+	List['<a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>']
 ] 
 </pre>
 
