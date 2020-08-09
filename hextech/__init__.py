@@ -1,1 +1,2 @@
-from .hextech import Tournament, Match, Game, Scoreline, Player, getTournaments
+from .hextech import *
+from .ddragon import * #updateDDragonData

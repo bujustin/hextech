@@ -2,13 +2,14 @@ import json
 import requests
 
 from .consts import *
+from . import ddragon
 
 
 """
 Params:
-    List of leagues to get tournaments from (e.g. LCS, LCK)
+    List[str] : list of leagues to get tournaments from (e.g. LCS, LCK)
 Returns:
-    Dictionary of tournament names mapped to tournament objects
+    Dict[str -> Tournament] : dictionary of tournament names mapped to tournament objects
 """
 def getTournaments(leagues=DEFAULT_LEAGUES):
     url = TOURNAMENTS_URL.format(" OR ".join("L.League_Short='{}'".format(league) for league in leagues))
@@ -73,7 +74,7 @@ class Match:
         return """{} {} {}-{} {}\n""".format(
             self.dateTime.split(" ")[0], self.teams[0], self.scores[0], self.scores[1], self.teams[1])
 
-    def getGames(self):
+    def getGames(self, retrieveImages=False):
         url = GAMES_URL.format(" OR ".join("SG.UniqueGame='{}'".format(uniqueGame) for uniqueGame in self._uniqueGames))
         gamesJson = requests.get(url).json()["cargoquery"]
 
@@ -108,9 +109,13 @@ class Match:
             scoreline.assists = int(gameJson["Assists"])
             scoreline.gold = int(gameJson["Gold"])
             scoreline.cs = int(gameJson["CS"])
-            scoreline.summonerSpells = gameJson["SummonerSpells"]
-            scoreline.items = gameJson["Items"]
+            scoreline.summonerSpells = gameJson["SummonerSpells"].split(",")
+            scoreline.items = gameJson["Items"].split(",")
             scoreline.runes = gameJson["KeystoneRune"]
+
+            if retrieveImages:
+                # retrieve images using data dragon api and populate assets field
+                pass
 
             game = gameMap[uniqueGame]
             gameIndex = game.teams.index(gameJson["Team"])
@@ -134,11 +139,13 @@ class Game:
         self.scoreboard = [[None] * 5, [None] * 5]
 
     def __str__(self):
-
         return "\t{}: {} vs. {}\n\tWinner: {} in {}\n\t\t{}\n".format(
             self.gameName, self.teams[0], self.teams[1],
             self.teams[self.winner], self.duration,
             "\n\t\t".join([str(self.scoreboard[0][i])+"\t\t"+str(self.scoreboard[1][i]) for i in range(5)]))
+
+    def getScoreline(self, teamIndex, roleIndex):
+        return self.scoreboard[teamIndex][roleIndex]
 
 class Scoreline:
     def __init__(self, uniqueGame, player):
@@ -154,9 +161,10 @@ class Scoreline:
         self.gold = 0
         self.cs = 0
 
-        self.summonerSpells = ""
-        self.items = ""
+        self.summonerSpells = []
+        self.items = []
         self.runes = ""
+        self.assets = {}
 
     def __str__(self):
         return "{}\t{}\t{}-{}-{}".format(

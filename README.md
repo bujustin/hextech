@@ -24,6 +24,8 @@ for match in matches:
 		print(game)
 ~~~
 
+Objects of the following classes are meant to be read-only; they are automatically instantiated by methods such as tournament.getMatches() and match.getGames().
+
 ### Tournament Class
 
 A league specific collection of matches within a specified time frame (e.g. LCK 2020 Summer).
@@ -86,6 +88,12 @@ scoreboard: [
 ] 
 </pre>
 
+#### Functions
+
+<pre>
+getScoreline(teamIndex: int, roleIndex: int) -> <a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>
+</pre>
+
 ### Scoreline Class
 
 Represents the stats for a given player for a specific game.
@@ -105,8 +113,8 @@ assists: int
 gold: int
 cs: int
 
-summonerSpells: str
-items: str
+summonerSpells: List[str]
+items: List[str]
 runes: str
 </pre>
 
