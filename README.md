@@ -6,6 +6,7 @@ This package uses data from [Leaguepedia](https://lol.gamepedia.com/) and Riot's
 ## Installation
 
 With [pip](https://pypi.org/project/Hextech/):
+
 `pip install hextech`
 
 ## Usage
@@ -66,7 +67,9 @@ getGames() -> List[[Game](#game class)]
 
 #### Variables
 
-~~~
+The scoreboard variable contains [Scoreline](#scoreline-class) variables for each role on each team. The list is indexed such that scoreboard[0] and scoreboard[1] correspond to team 1 and 2 respectively; and scoreboard[i][0] -> top ... scoreboard[i][4] -> support.
+
+<pre>
 _uniqueGame: str # for internal use
 
 gameName: str
@@ -78,10 +81,10 @@ winner: int # corresponding with the index (zero-based) of the winning team
 teams: Tuple(str, str)
 bans: Tuple(str, str)
 scoreboard: [ 
-	List[[Scoreline](#scoreline class)], 	# list of scorelines for team 1
-	List[[Scoreline](#scoreline class)] 	# list of scorelines for team 2
-] 											# each list has an index for each player from top -> support
-~~~
+	List[[Scoreline](#scoreline-class)],
+	List[[Scoreline](#scoreline-class)]
+] 
+</pre>
 
 ### Scoreline Class
 
