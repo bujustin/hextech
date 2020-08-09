@@ -38,9 +38,9 @@ league: str
 
 #### Functions
 
-~~~
-getMatches() -> Dict[str -> [Match](#match class)]
-~~~
+<pre>
+getMatches() -> Dict[str -> '<a href="https://github.com/bujustin/hextech#match-class">Match</a>']
+</pre>
 
 ### Match Class
 
@@ -59,9 +59,9 @@ scores: Tuple(int, int)
 
 #### Functions
 
-~~~
-getGames() -> List[[Game](#game class)]
-~~~
+<pre>
+getGames() -> List['<a href="https://github.com/bujustin/hextech#game-class">Game</a>']
+</pre>
 
 ### Game Class
 
@@ -92,9 +92,9 @@ Represents the stats for a given player for a specific game.
 
 #### Variables
 
-~~~
+<pre>
 _uniqueGame: str # for internal use
-player: [Player](#player class)
+player: '<a href="https://github.com/bujustin/hextech#player-class">Player</a>'
 
 role: str
 champion: str
@@ -108,7 +108,7 @@ cs: int
 summonerSpells: str
 items: str
 runes: str
-~~~
+</pre>
 
 ### Player Class
 
