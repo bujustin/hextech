@@ -115,7 +115,10 @@ class Match:
 
             if retrieveImages:
                 # retrieve images using data dragon api and populate assets field
-                pass
+                scoreline.assets = ddragon.getItemThumbnail(scoreline.items)
+                scoreline.assets[scoreline.champion] = ddragon.getChampionThumbnail(scoreline.champion)
+                for summonerSpell in scoreline.summonerSpells:
+                    scoreline.assets[summonerSpell] = ddragon.getSummonerSpellThumbnail(summonerSpell)
 
             game = gameMap[uniqueGame]
             gameIndex = game.teams.index(gameJson["Team"])
@@ -164,6 +167,7 @@ class Scoreline:
         self.summonerSpells = []
         self.items = []
         self.runes = ""
+        
         self.assets = {}
 
     def __str__(self):

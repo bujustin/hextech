@@ -62,14 +62,14 @@ scores: Tuple(int, int)
 #### Functions
 
 <pre>
-getGames() -> List[<a href="https://github.com/bujustin/hextech#game-class">Game</a>]
+getGames(retrieveImages: bool) -> List[<a href="https://github.com/bujustin/hextech#game-class">Game</a>] 
 </pre>
+
+`retrieveImages` is false by default. If `retrieveImages` is true, the `assets` variable in the <a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a> objects get populated by data from the data dragon api.
 
 ### Game Class
 
 #### Variables
-
-The scoreboard variable contains [Scoreline](#scoreline-class) variables for each role on each team. The list is indexed such that scoreboard[0] and scoreboard[1] correspond to team 1 and 2 respectively; and scoreboard[i][0] -> top ... scoreboard[i][4] -> support.
 
 <pre>
 _uniqueGame: str # for internal use
@@ -87,6 +87,8 @@ scoreboard: [
 	List[<a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>]
 ] 
 </pre>
+
+The scoreboard variable contains [Scoreline](#scoreline-class) variables for each role on each team. The list is indexed such that scoreboard[0] and scoreboard[1] correspond to team 1 and 2 respectively; and scoreboard[i][0] -> top ... scoreboard[i][4] -> support.
 
 #### Functions
 
@@ -116,6 +118,8 @@ cs: int
 summonerSpells: List[str]
 items: List[str]
 runes: str
+
+assets: Dict[str -> str] # dictonary mapping name of object (e.g. Blade of the Ruined King) to it's thumbnail url
 </pre>
 
 ### Player Class

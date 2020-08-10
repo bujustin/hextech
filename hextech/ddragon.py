@@ -47,6 +47,7 @@ Returns:
     str : url of champion thumbnail
 """
 def getChampionThumbnail(champion):
+    # TODO: add override for Wukong -> MonkeyKing
     version = checkDDragonData()
     return CHAMPION_THUMBNAIL_URL.format(version, champion)
 
