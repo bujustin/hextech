@@ -136,6 +136,12 @@ thumbnail: str # url to the player's thumbnail image
 
 If you find a bug, please open a new [issue](https://github.com/bujustin/hextech/issues).
 
+## Changelog
+
+### v1.0.2 - 8/10/2020
+
+Added integration with Riot's Data Dragon api to retrieve champion, item, and summoner spell images.
+
 ## Disclaimer
 
 Hextech isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
