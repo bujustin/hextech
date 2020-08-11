@@ -1,30 +1,49 @@
+import unittest
 import hextech
 
-# tournaments = hextech.getTournaments()
-# tournament = tournaments["LCK 2020 Spring"]
-# print(tournament)
-# matches = tournament.getMatches()
-# print(matches[0])
-# games = matches[0].getGames()
-# print(games[0])
 
-"""
-ddragon.py tests
-"""
+class TestSum(unittest.TestCase):
 
-def testGetChampionThumbnail():
-	assert hextech.getChampionThumbnail("Aatrox") == "http://ddragon.leagueoflegends.com/cdn/10.16.1/img/champion/Aatrox.png"
+    def testHextech(self):
+        tournaments = hextech.getTournaments()
+        self.assertTrue(len(tournaments) > 0)
 
-def testGetItemThumbnail():
-	items = "Blade of the Ruined King,Corrupting Potion,Broken Stopwatch,Mercury's Treads,Sterak's Gage,Trinity Force".split(",")
-	itemThumbnails = hextech.getItemThumbnail(items)
+        tournament = tournaments["LCK 2020 Spring"]
+        self.assertIsInstance(tournament, hextech.Tournament)
 
-	assert itemThumbnails["Blade of the Ruined King"] == "http://ddragon.leagueoflegends.com/cdn/10.16.1/img/item/3153.png"
-	assert itemThumbnails["Corrupting Potion"] == "http://ddragon.leagueoflegends.com/cdn/10.16.1/img/item/2033.png"
-	assert itemThumbnails["Broken Stopwatch"] == "http://ddragon.leagueoflegends.com/cdn/10.16.1/img/item/2424.png"
-	assert itemThumbnails["Mercury's Treads"] == "http://ddragon.leagueoflegends.com/cdn/10.16.1/img/item/3111.png"
-	assert itemThumbnails["Sterak's Gage"] == "http://ddragon.leagueoflegends.com/cdn/10.16.1/img/item/3053.png"
-	assert itemThumbnails["Trinity Force"] == "http://ddragon.leagueoflegends.com/cdn/10.16.1/img/item/3078.png"
+        matches = tournament.getMatches()
+        self.assertTrue(len(matches) > 0)
 
-testGetChampionThumbnail()
-testGetItemThumbnail()
+        match = matches[0]
+        self.assertIsInstance(match, hextech.Match)
+
+        games = match.getGames(retrieveImages=True)
+        self.assertTrue(len(games) > 0)
+
+        game = games[0]
+        self.assertIsInstance(game, hextech.Game)
+
+        scoreline = game.scoreboard[0][0]
+        self.assertIsInstance(scoreline, hextech.Scoreline)
+        self.assertTrue(len(scoreline.assets) > 0)
+
+        player = scoreline.player
+        self.assertIsInstance(player, hextech.Player)
+
+    """ ddragon.py tests """
+
+    def testGetChampionThumbnail(self):
+        aatroxThumbnail = hextech.getChampionThumbnail("Aatrox")
+        self.assertIsInstance(aatroxThumbnail, str)
+
+    def testGetItemThumbnail(self):
+        items = "Blade of the Ruined King,Corrupting Potion,Broken Stopwatch,Mercury's Treads,Sterak's Gage,Trinity Force".split(",")
+        itemThumbnails = hextech.getItemThumbnail(items)
+        self.assertIsInstance(itemThumbnails["Blade of the Ruined King"], str)
+
+    def testGetChampionThumbnail(self):
+        flashThumbnail = hextech.getSummonerSpellThumbnail("Flash")
+        self.assertIsInstance(flashThumbnail, str)
+
+if __name__ == '__main__':
+    unittest.main()
