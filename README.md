@@ -34,7 +34,7 @@ A league specific collection of matches within a specified time frame (e.g. LCK 
 
 ~~~
 name: str
-startDate: str
+startDate: str # format yyyy-mm-dd
 league: str
 ~~~
 
@@ -54,7 +54,8 @@ A series of games between two teams. There could be one or multiple games in a m
 _uniqueMatch: str # for internal use
 _uniqueGames: List[str] # for internal use
 
-dateTime: str
+dateTime: str # format yyyy-mm-dd hh:mm:ss
+patch: str
 teams: Tuple(str, str)
 scores: Tuple(int, int)
 ~~~
@@ -75,8 +76,8 @@ getGames(retrieveImages: bool) -> List[<a href="https://github.com/bujustin/hext
 _uniqueGame: str # for internal use
 
 gameName: str
-dateTime: str
-duration: str
+dateTime: str # format yyyy-mm-dd hh:mm:ss
+duration: str # format hh:mm
 matchHistory: str # link to Riot's match history page for this game
 
 winner: int # corresponding with the index (zero-based) of the winning team

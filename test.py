@@ -4,7 +4,7 @@ import hextech
 
 class TestSum(unittest.TestCase):
 
-    def testHextech(self):
+    def test(self):
         tournaments = hextech.getTournaments()
         self.assertTrue(len(tournaments) > 0)
 
@@ -29,6 +29,16 @@ class TestSum(unittest.TestCase):
 
         player = scoreline.player
         self.assertIsInstance(player, hextech.Player)
+
+    def testGetMatches(self):
+        matches = hextech.getMatches(tournamentName="LCK 2020 Spring", matchTeam=("T1", "DragonX"))
+        self.assertTrue(len(matches) > 0)
+
+        for match in matches:
+            print(match)
+
+        match = matches[0]
+        self.assertIsInstance(match, hextech.Match)
 
     """ ddragon.py tests """
 

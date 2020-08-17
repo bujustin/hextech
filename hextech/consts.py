@@ -1,3 +1,11 @@
+DEFAULT_LEAGUES = [
+    "LCK",
+    "EU LCS", "LEC",
+    "LCS", "NA LCS",
+    "LPL",
+    "MSC", "MSI", "WCS", "RR"
+]
+
 """
 Params:
     Where clause filtering by L.League_Short
@@ -12,17 +20,9 @@ Tournament data format (json)
 TOURNAMENTS_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
     &tables=Leagues=L,Tournaments=T
     &fields=T.Name,T.DateStart,L.League_Short
-    &where=NOT T.DateStart='' AND ({})
+    &where=NOT T.DateStart='' AND {}
     &join_on=L.League=T.League
     &order_by=T.DateStart DESC"""
-
-DEFAULT_LEAGUES = [
-    "LCK",
-    "EU LCS", "LEC",
-    "LCS", "NA LCS",
-    "LPL",
-    "MSC", "MSI", "WCS", "RR"
-]
 
 """
 Params:
@@ -40,8 +40,8 @@ Match data format (json)
 """
 MATCHES_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
     &tables=ScoreboardGames=SG
-    &fields=SG.DateTime_UTC,SG.Team1,SG.Team2,SG.Team1Score,SG.Team2Score,SG.UniqueGame
-    &where=SG.Tournament='{}'
+    &fields=SG.DateTime_UTC,SG.Patch,SG.Team1,SG.Team2,SG.Team1Score,SG.Team2Score,SG.UniqueGame
+    &where={}
     &order_by=SG.DateTime_UTC DESC"""
 
 """
