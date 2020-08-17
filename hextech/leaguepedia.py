@@ -2,8 +2,9 @@ import re
 import json
 import requests
 
-from .consts import *
 from . import ddragon
+from .classes import *
+from .consts import *
 
 
 def getTeams(tournamentName):
@@ -27,7 +28,9 @@ e.g. tournamentDate=(">2019-08-21", "<=2019-12-01") will return tournaments with
 
 """
 Params:
-    List[str] : list of leagues to get tournaments from (e.g. LCS, LCK)
+    tournamentLeague: str/List[str]/Tuple[str] : filter by leagues to get tournaments from (e.g. LCS, LCK)
+    tournamentName: str/List[str]/Tuple[str] : filter by tournament names (e.g. LCK 2020 Spring)
+    tournamentDate: str/List[str]/Tuple[str] : 
 Returns:
     Dict[str -> Tournament] : dictionary of tournament names mapped to tournament objects
 """
@@ -94,6 +97,13 @@ def getMatches(tournamentName=None, matchDate=None, matchPatch=None, matchTeam=N
 
     return matches
 
+"""
+Params:
+    uniqueGames: List[str] : list of strings indicating games to retrieve
+    retrieveImages: Bool : indicates whether to retrieve spells, items, runes images from data dragon
+Returns:
+    List[Game] : list of game objects retrieved
+"""
 def _getGames(uniqueGames, retrieveImages=False):
     url = GAMES_URL.format(_formatArgs(uniqueGames, "SG.UniqueGame"))
     gamesJson = requests.get(url).json()["cargoquery"]
@@ -147,6 +157,13 @@ def _getGames(uniqueGames, retrieveImages=False):
 
     return games
 
+"""
+Params:
+    args: str/List[str]/Tuple[str]
+    prefix: str
+Returns:
+    str : args formatted to be used for leaguepedia query
+"""
 def _formatArgs(args, prefix):
     if args == None: return None
     delim = " OR "
@@ -163,89 +180,3 @@ def _formatArgs(args, prefix):
             return "{}{}'{}'".format(prefix, arg[:i], arg[i:])
 
     return "(" + delim.join(formatArg(arg) for arg in args) + ")"
-
-class Tournament:
-    def __init__(self, name):
-        self.name = name
-
-        self.startDate = ""
-        self.league = ""
-
-    def __str__(self):
-        return self.name
-
-    def getMatches(self):
-        return getMatches(tournamentName=self.name)
-
-class Match:
-    def __init__(self, _uniqueMatch):
-        self._uniqueMatch = _uniqueMatch
-        self._uniqueGames = []
-
-        self.dateTime = None
-        self.patch = None
-        self.teams = (None, None)
-        self.scores = (0, 0)
-
-    def __str__(self):
-        return """{} {} {}-{} {}\n""".format(
-            self.dateTime.split(" ")[0], self.teams[0], self.scores[0], self.scores[1], self.teams[1])
-
-    def getGames(self, retrieveImages=False):
-        return _getGames(self._uniqueGames, retrieveImages)
-
-class Game:
-    def __init__(self, uniqueGame):
-        self._uniqueGame = uniqueGame
-
-        self.gameName = None
-        self.dateTime = None
-        self.duration = None
-        self.matchHistory = None
-
-        self.winner = 0
-        self.teams = (None, None)
-        self.bans = (None, None)
-        self.scoreboard = [[None] * 5, [None] * 5]
-
-    def __str__(self):
-        return "\t{}: {} vs. {}\n\tWinner: {} in {}\n\t\t{}\n".format(
-            self.gameName, self.teams[0], self.teams[1],
-            self.teams[self.winner], self.duration,
-            "\n\t\t".join([str(self.scoreboard[0][i])+"\t\t"+str(self.scoreboard[1][i]) for i in range(5)]))
-
-    def getScoreline(self, teamIndex, roleIndex):
-        return self.scoreboard[teamIndex][roleIndex]
-
-class Scoreline:
-    def __init__(self, uniqueGame, player):
-        self._uniqueGame = uniqueGame
-        self.player = player
-
-        self.role = ""
-        self.champion = ""
-
-        self.kills = 0
-        self.deaths = 0
-        self.assists = 0
-        self.gold = 0
-        self.cs = 0
-
-        self.summonerSpells = []
-        self.items = []
-        self.runes = ""
-        
-        self.assets = {}
-
-    def __str__(self):
-        return "{}\t{}\t{}-{}-{}".format(
-            self.player, self.champion, self.kills, self.deaths, self.assists)
-
-class Player:
-    def __init__(self, name, team):
-        self.name = name
-        self.team = team
-        self.thumbnail = None
-
-    def __str__(self):
-        return "{} {}".format(self.team, self.name)
