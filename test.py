@@ -31,7 +31,7 @@ class TestSum(unittest.TestCase):
         self.assertIsInstance(player, hextech.Player)
 
     def testGetMatches(self):
-        matches = hextech.getMatches(tournamentName="LCK 2020 Spring", matchTeam=("T1", "DragonX"))
+        matches = hextech.getMatches(tournamentName="LCK 2020 Spring", matchTeam="DragonX")
         self.assertTrue(len(matches) > 0)
 
         for match in matches:
@@ -39,6 +39,10 @@ class TestSum(unittest.TestCase):
 
         match = matches[0]
         self.assertIsInstance(match, hextech.Match)
+
+    def testGetTeams(self):
+        teams = hextech.getTeams(tournamentName="LCK 2020 Spring")
+        self.assertTrue(len(teams) == 10)
 
     """ ddragon.py tests """
 

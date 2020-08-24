@@ -7,9 +7,21 @@ from .classes import *
 from .consts import *
 
 
+"""
+Params:
+    tournamentName: str/List[str]/Tuple[str] : filter by tournament names (e.g. LCK 2020 Spring)
+Returns:
+    List[str] : list of team names in tournament
+"""
 def getTeams(tournamentName):
-    print("team")
-    pass
+    argsString = _formatArgs(tournamentName, "SG.Tournament")
+    url = TEAMS_URL.format(argsString)
+    teamsJson = requests.get(url).json()["cargoquery"]
+
+    teams = []
+    for i in range(len(teamsJson)):
+        teams.append(teamsJson[i]["title"]["Team1"])
+    return teams
 
 """
 Filters support equality operators (=, !=, >, <, >=, <=)

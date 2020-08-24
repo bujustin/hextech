@@ -6,6 +6,17 @@ DEFAULT_LEAGUES = [
     "MSC", "MSI", "WCS", "RR"
 ]
 
+TEAMS_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
+    &tables=ScoreboardGames=SG
+    &fields=SG.Team1
+    &where={}
+    &group_by=SG.Team1"""
+
+TEAM_REDIRECT_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
+    &tables=TeamRedirects=TR
+    &fields=TR._pageName=TeamName
+    &where=TR.AllName='{}'"""
+
 """
 Params:
     Where clause filtering by L.League_Short
