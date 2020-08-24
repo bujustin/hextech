@@ -30,6 +30,7 @@ Params:
 Match data format (json)
 {
     "DateTime UTC":"2020-08-07 13:13:00",
+    "Patch":"10.15",
     "Team1":"KT Rolster",
     "Team2":"Hanwha Life Esports",
     "Team1Score":"2",

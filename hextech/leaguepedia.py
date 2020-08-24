@@ -8,6 +8,7 @@ from .consts import *
 
 
 def getTeams(tournamentName):
+    print("team")
     pass
 
 """
@@ -30,7 +31,7 @@ e.g. tournamentDate=(">2019-08-21", "<=2019-12-01") will return tournaments with
 Params:
     tournamentLeague: str/List[str]/Tuple[str] : filter by leagues to get tournaments from (e.g. LCS, LCK)
     tournamentName: str/List[str]/Tuple[str] : filter by tournament names (e.g. LCK 2020 Spring)
-    tournamentDate: str/List[str]/Tuple[str] : 
+    tournamentDate: str/List[str]/Tuple[str] : date in the format of yyyy-mm-dd
 Returns:
     Dict[str -> Tournament] : dictionary of tournament names mapped to tournament objects
 """
@@ -54,10 +55,19 @@ def getTournaments(tournamentLeague=DEFAULT_LEAGUES, tournamentName=None, tourna
 
     return tournaments
 
+"""
+Params:
+    tournamentName: str/List[str]/Tuple[str] : filter by tournament names (e.g. LCK 2020 Spring)
+    matchDate: str/List[str]/Tuple[str] : date in the format of yyyy-mm-dd
+    matchPatch: str/List[str]/Tuple[str] : game patch the match is played on (e.g. 10.15)
+    matchTeam: str/List[str]/Tuple[str]
+Returns:
+    List[Match]
+"""
 def getMatches(tournamentName=None, matchDate=None, matchPatch=None, matchTeam=None):
     argsString = " AND ".join(filter(None, [
         _formatArgs(tournamentName, "SG.Tournament"),
-        _formatArgs(matchDate, "SG.DateTime_UTC"),
+        _formatDateTimeArgs(matchDate, "SG.DateTime_UTC"),
         _formatArgs(matchPatch, "SG.Patch")
         ]))
 
@@ -180,3 +190,28 @@ def _formatArgs(args, prefix):
             return "{}{}'{}'".format(prefix, arg[:i], arg[i:])
 
     return "(" + delim.join(formatArg(arg) for arg in args) + ")"
+
+"""
+Helper function to change date strings to datetime strings when formating args
+Params:
+    dateArgs: str/List[str]/Tuple[str] : date args in the format of yyyy-mm-dd
+    prefix: str
+Returns:
+    str : date args in the format of yyyy-mm-dd hh:mm:ss
+"""
+def _formatDateTimeArgs(dateArgs, prefix):
+    if dateArgs == None: return None
+    delim = " OR "
+    if isinstance(dateArgs, list): pass
+    elif isinstance(dateArgs, tuple): delim = " AND "
+    else: dateArgs = [dateArgs]
+
+    def formatDateTimeArg(dateArg):
+        m = re.search("<=|>=|!=|<|>|=", dateArg)
+        if m == None or m.group(0) == "=":
+            return "({0}>='{1} 00:00:00' AND {0}<='{1} 23:59:59')".format(prefix, dateArg)
+        else:
+            i = m.span()[1]
+            return "{}{}'{} 00:00:00'".format(prefix, dateArg[:i], dateArg[i:])
+
+    return "(" + delim.join(formatDateTimeArg(dateArg) for dateArg in dateArgs) + ")"
