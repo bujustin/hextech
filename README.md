@@ -11,7 +11,7 @@ With [pip](https://pypi.org/project/Hextech/):
 
 ## Usage
 
-Here is a basic example of using hextech to print all game results in LCK 2020 Summer split.
+Here is a basic example of using hextech to print the winners of each game in LCK 2020 Summer split.
 
 ~~~
 import hextech
@@ -21,26 +21,60 @@ matches = tournament.getMatches()
 for match in matches:
 	games = match.getGames()
 	for game in games:
-		print(game)
+		print(game.teams[game.winner])
 ~~~
 
 Objects of the following classes are meant to be read-only; they are automatically instantiated by methods such as tournament.getMatches() and match.getGames().
+
+### Functions
+
+The definitions of the framework's base functions. The functions take in parameters that act as filters for data selection. Some filters are required while others are optional. More detailed descriptions of the filters can be found in the source code.
+
+Filters support equality operators (=, !=, >, <, >=, <=)
+e.g. `tournamentDate=">2019-08-21"` returns all tournaments with dates greater than 2019-08-21
+
+Filters can be either single values 
+e.g. `tournamentName="LCK 2020 Summer"`
+or iterables
+e.g. `tournamentLeague=["LCK", "LCS"]`
+
+For iterable filters (lists/tuples), the type determines whether AND/OR will be applied
+Lists will apply OR to filter elements
+e.g. `tournamentDate=["2019-08-21", ">2020-01-01"]` will return tournaments with tournamentDate = 2019-08-21 OR tournamentDate > 2020-01-01
+Tuples will apply AND to filter elements (this is useful for applying tournamentDate range filters)
+e.g. `tournamentDate=(">2019-08-21", "<=2019-12-01")` will return tournaments with dates between 2019-08-21 AND 2019-12-01
+
+These functions are used by other classes 
+e.g. `Tournament.getMatches()` calls the base `getMatches()` function with the filter `tournamentName`
+
+<pre>
+getTeams(
+	tournamentName: str/List[str]/Tuple(str) # required
+) -> List[str]
+
+getTournaments(
+	tournamentLeague: str/List[str]/Tuple(str), # optional (if not specified, use default leagues)
+	tournamentName: str/List[str]/Tuple(str), # optional
+	tournamentDate: str/List[str]/Tuple(str) # optional
+) -> Dict[str -> <a href="https://github.com/bujustin/hextech#tournament-class">Tournament</a>]
+
+getMatches(
+	tournamentName: str/List[str]/Tuple(str), # optional
+    matchDate: str/List[str]/Tuple(str) # optional
+    matchPatch: str/List[str]/Tuple(str) # optional
+    matchTeam: str/List[str]/Tuple(str) # optional
+) -> List[<a href="https://github.com/bujustin/hextech#match-class">Match</a>]
+</pre>
 
 ### Tournament Class
 
 A league specific collection of matches within a specified time frame (e.g. LCK 2020 Summer).
 
-#### Variables
-
-~~~
+<pre>
 name: str
 startDate: str # format yyyy-mm-dd
 league: str
-~~~
 
-#### Functions
-
-<pre>
 getMatches() -> Dict[str -> <a href="https://github.com/bujustin/hextech#match-class">Match</a>]
 </pre>
 
@@ -48,9 +82,7 @@ getMatches() -> Dict[str -> <a href="https://github.com/bujustin/hextech#match-c
 
 A series of games between two teams. There could be one or multiple games in a match.
 
-#### Variables
-
-~~~
+<pre>
 _uniqueMatch: str # for internal use
 _uniqueGames: List[str] # for internal use
 
@@ -58,19 +90,13 @@ dateTime: str # format yyyy-mm-dd hh:mm:ss
 patch: str
 teams: Tuple(str, str)
 scores: Tuple(int, int)
-~~~
 
-#### Functions
-
-<pre>
 getGames(retrieveImages: bool) -> List[<a href="https://github.com/bujustin/hextech#game-class">Game</a>] 
 </pre>
 
 `retrieveImages` is false by default. If `retrieveImages` is true, the `assets` variable in the <a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a> objects get populated by data from the data dragon api.
 
 ### Game Class
-
-#### Variables
 
 <pre>
 _uniqueGame: str # for internal use
@@ -87,21 +113,15 @@ scoreboard: [
 	List[<a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>],
 	List[<a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>]
 ] 
+
+getScoreline(teamIndex: int, roleIndex: int) -> <a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>
 </pre>
 
 The scoreboard variable contains [Scoreline](#scoreline-class) variables for each role on each team. The list is indexed such that scoreboard[0] and scoreboard[1] correspond to team 1 and 2 respectively; and scoreboard[i][0] -> top ... scoreboard[i][4] -> support.
 
-#### Functions
-
-<pre>
-getScoreline(teamIndex: int, roleIndex: int) -> <a href="https://github.com/bujustin/hextech#scoreline-class">Scoreline</a>
-</pre>
-
 ### Scoreline Class
 
 Represents the stats for a given player for a specific game.
-
-#### Variables
 
 <pre>
 _uniqueGame: str # for internal use
@@ -124,8 +144,6 @@ assets: Dict[str -> str] # dictonary mapping name of object (e.g. Blade of the R
 </pre>
 
 ### Player Class
-
-#### Variables
 
 ~~~
 name: str

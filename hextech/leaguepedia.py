@@ -8,22 +8,6 @@ from .consts import *
 
 
 """
-Params:
-    tournamentName: str/List[str]/Tuple[str] : filter by tournament names (e.g. LCK 2020 Spring)
-Returns:
-    List[str] : list of team names in tournament
-"""
-def getTeams(tournamentName):
-    argsString = _formatArgs(tournamentName, "SG.Tournament")
-    url = TEAMS_URL.format(argsString)
-    teamsJson = requests.get(url).json()["cargoquery"]
-
-    teams = []
-    for i in range(len(teamsJson)):
-        teams.append(teamsJson[i]["title"]["Team1"])
-    return teams
-
-"""
 Filters support equality operators (=, !=, >, <, >=, <=)
 e.g. tournamentDate=">2019-08-21" returns all tournaments with dates greater than 2019-08-21
 
@@ -41,9 +25,25 @@ e.g. tournamentDate=(">2019-08-21", "<=2019-12-01") will return tournaments with
 
 """
 Params:
-    tournamentLeague: str/List[str]/Tuple[str] : filter by leagues to get tournaments from (e.g. LCS, LCK)
-    tournamentName: str/List[str]/Tuple[str] : filter by tournament names (e.g. LCK 2020 Spring)
-    tournamentDate: str/List[str]/Tuple[str] : date in the format of yyyy-mm-dd
+    tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+Returns:
+    List[str] : list of team names in tournament
+"""
+def getTeams(tournamentName):
+    argsString = _formatArgs(tournamentName, "SG.Tournament")
+    url = TEAMS_URL.format(argsString)
+    teamsJson = requests.get(url).json()["cargoquery"]
+
+    teams = []
+    for i in range(len(teamsJson)):
+        teams.append(teamsJson[i]["title"]["Team1"])
+    return teams
+
+"""
+Params:
+    tournamentLeague: str/List[str]/Tuple(str) : filter by leagues to get tournaments from (e.g. LCS, LCK)
+    tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+    tournamentDate: str/List[str]/Tuple(str) : date in the format of yyyy-mm-dd
 Returns:
     Dict[str -> Tournament] : dictionary of tournament names mapped to tournament objects
 """
@@ -69,10 +69,10 @@ def getTournaments(tournamentLeague=DEFAULT_LEAGUES, tournamentName=None, tourna
 
 """
 Params:
-    tournamentName: str/List[str]/Tuple[str] : filter by tournament names (e.g. LCK 2020 Spring)
-    matchDate: str/List[str]/Tuple[str] : date in the format of yyyy-mm-dd
-    matchPatch: str/List[str]/Tuple[str] : game patch the match is played on (e.g. 10.15)
-    matchTeam: str/List[str]/Tuple[str]
+    tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+    matchDate: str/List[str]/Tuple(str) : date in the format of yyyy-mm-dd
+    matchPatch: str/List[str]/Tuple(str) : game patch the match is played on (e.g. 10.15)
+    matchTeam: str/List[str]/Tuple(str)
 Returns:
     List[Match]
 """
@@ -181,7 +181,7 @@ def _getGames(uniqueGames, retrieveImages=False):
 
 """
 Params:
-    args: str/List[str]/Tuple[str]
+    args: str/List[str]/Tuple(str)
     prefix: str
 Returns:
     str : args formatted to be used for leaguepedia query
@@ -206,7 +206,7 @@ def _formatArgs(args, prefix):
 """
 Helper function to change date strings to datetime strings when formating args
 Params:
-    dateArgs: str/List[str]/Tuple[str] : date args in the format of yyyy-mm-dd
+    dateArgs: str/List[str]/Tuple(str) : date args in the format of yyyy-mm-dd
     prefix: str
 Returns:
     str : date args in the format of yyyy-mm-dd hh:mm:ss
