@@ -48,6 +48,10 @@ These functions are used by other classes
 e.g. `Tournament.getMatches()` calls the base `getMatches()` function with the filter `tournamentName`
 
 <pre>
+getPlayers(
+	tournamentName: str/List[str]/Tuple(str) # required
+) -> List[<a href="https://github.com/bujustin/hextech#player-class">Player</a>]
+
 getTeams(
 	tournamentName: str/List[str]/Tuple(str) # required
 ) -> List[str]
@@ -76,6 +80,8 @@ startDate: str # format yyyy-mm-dd
 league: str
 
 getMatches() -> Dict[str -> <a href="https://github.com/bujustin/hextech#match-class">Match</a>]
+getTeams() -> List[str]
+getPlayers() -> List[<a href="https://github.com/bujustin/hextech#player-class">Player</a>]
 </pre>
 
 ### Match Class

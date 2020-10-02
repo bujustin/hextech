@@ -14,6 +14,12 @@ class Tournament:
     def getMatches(self):
         return leaguepedia.getMatches(tournamentName=self.name)
 
+    def getTeams(self):
+        return leaguepedia.getTeams(self.name)
+
+    def getPlayers(self):
+        return leaguepedia.getPlayers(self.name)
+
 class Match:
     def __init__(self, _uniqueMatch):
         self._uniqueMatch = _uniqueMatch

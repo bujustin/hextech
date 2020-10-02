@@ -6,6 +6,32 @@ DEFAULT_LEAGUES = [
     "MSC", "MSI", "WCS", "RR"
 ]
 
+"""
+Params:
+    Leaguepedia tournament name
+Player data format (json)
+{
+    "Team":"T1"
+    "Player":"Teddy"
+    "FileName":"SKT Teddy 2019 Split 2.png"
+}
+"""
+PLAYERS_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
+    &tables=Tournaments=T,TournamentPlayers=TP,PlayerImages=PI
+    &fields=TP.Team,TP.Player,PI.FileName
+    &where={}
+    &join_on=T.OverviewPage=TP.OverviewPage,TP.Link=PI.Link
+    &order_by=PI.FileName DESC
+    &group_by=TP.Player"""
+
+"""
+Params:
+    Leaguepedia tournament name
+Team data format (json)
+{
+    "Team1":"DragonX"
+}
+"""
 TEAMS_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
     &tables=ScoreboardGames=SG
     &fields=SG.Team1

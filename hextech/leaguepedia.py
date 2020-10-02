@@ -27,6 +27,25 @@ e.g. tournamentDate=(">2019-08-21", "<=2019-12-01") will return tournaments with
 Params:
     tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
 Returns:
+    List[Player] : list of players in tournament
+"""
+def getPlayers(tournamentName):
+    argsString = _formatArgs(tournamentName, "T.Name")
+    url = PLAYERS_URL.format(argsString)
+    playersJson = requests.get(url).json()["cargoquery"]
+    
+    players = []
+    for i in range(len(playersJson)):
+        playerJson = playersJson[i]["title"]
+        player = Player(playerJson["Player"], playerJson["Team"])
+        player.thumbnail = PLAYER_THUMBNAIL_URL.format(playerJson["FileName"])
+        players.append(player)
+    return players
+
+"""
+Params:
+    tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+Returns:
     List[str] : list of team names in tournament
 """
 def getTeams(tournamentName):
