@@ -91,7 +91,6 @@ A series of games between two teams. There could be one or multiple games in a m
 <pre>
 _uniqueMatch: str # for internal use
 _uniqueGames: List[str] # for internal use
-
 dateTime: str # format yyyy-mm-dd hh:mm:ss
 patch: str
 teams: Tuple(str, str)
@@ -106,12 +105,10 @@ getGames(retrieveImages: bool) -> List[<a href="https://github.com/bujustin/hext
 
 <pre>
 _uniqueGame: str # for internal use
-
 gameName: str
 dateTime: str # format yyyy-mm-dd hh:mm:ss
 duration: str # format hh:mm
 matchHistory: str # link to Riot's match history page for this game
-
 winner: int # corresponding with the index (zero-based) of the winning team
 teams: Tuple(str, str)
 bans: Tuple(str, str)
@@ -132,20 +129,16 @@ Represents the stats for a given player for a specific game.
 <pre>
 _uniqueGame: str # for internal use
 player: <a href="https://github.com/bujustin/hextech#player-class">Player</a>
-
 role: str
 champion: str
-
 kills: int
 deaths: int
 assists: int
 gold: int
 cs: int
-
 summonerSpells: List[str]
 items: List[str]
 runes: str
-
 assets: Dict[str -> str] # dictonary mapping name of object (e.g. Blade of the Ruined King) to it's thumbnail url
 </pre>
 
@@ -166,6 +159,10 @@ If you find a bug, please open a new [issue](https://github.com/bujustin/hextech
 ### v1.0.2 - 8/10/2020
 
 Added integration with Riot's Data Dragon api to retrieve champion, item, and summoner spell images.
+
+### v1.0.4 - 10/2/2020
+
+Added getTeams() and getPlayers() functionality.
 
 ## Disclaimer
 
