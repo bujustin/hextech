@@ -50,6 +50,8 @@ e.g. `Tournament.getMatches()` calls the base `getMatches()` function with the f
 <pre>
 getPlayers(
 	tournamentName: str/List[str]/Tuple(str) # required
+	roleFilter: List[str] # optional
+    thumbnailRedirect: Bool # optional
 ) -> List[<a href="https://github.com/bujustin/hextech#player-class">Player</a>]
 
 getTeams(
@@ -163,6 +165,10 @@ Added integration with Riot's Data Dragon api to retrieve champion, item, and su
 ### v1.0.4 - 10/2/2020
 
 Added getTeams() and getPlayers() functionality.
+
+### v1.0.5 - 11/12/2020
+
+Added roleFilter and thumbnailRedirect parameters and functionality to getPlayers(). Added role field to player class.
 
 ## Disclaimer
 

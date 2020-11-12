@@ -30,3 +30,4 @@ https://developer.riotgames.com/docs/lol#data-dragon
 - Deploy to pypi
 
         python -m twine upload --repository pypi dist/*
+        python -m twine upload --repository pypi dist/<package_name>-<version>.tar.gz dist/<package_name>-<version>-py3-none-any.whl
