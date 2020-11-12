@@ -18,7 +18,7 @@ Player data format (json)
 """
 PLAYERS_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
     &tables=Tournaments=T,TournamentPlayers=TP,PlayerImages=PI
-    &fields=TP.Team,TP.Player,PI.FileName
+    &fields=TP.Team,TP.Player,TP.Role,PI.FileName
     &where={}
     &join_on=T.OverviewPage=TP.OverviewPage,TP.Link=PI.Link
     &order_by=PI.FileName DESC

@@ -85,9 +85,10 @@ class Scoreline:
             self.player, self.champion, self.kills, self.deaths, self.assists)
 
 class Player:
-    def __init__(self, name, team):
+    def __init__(self, name, team, role):
         self.name = name
         self.team = team
+        self.role = role
         self.thumbnail = None
 
     def __str__(self):

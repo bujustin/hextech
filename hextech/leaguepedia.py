@@ -26,19 +26,32 @@ e.g. tournamentDate=(">2019-08-21", "<=2019-12-01") will return tournaments with
 """
 Params:
     tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+    roleFilter: List[str] : (optional) list of player roles to include
+    thumbnailRedirect: Bool : (optional) if true, get redirected url for player image
 Returns:
     List[Player] : list of players in tournament
 """
-def getPlayers(tournamentName):
+def getPlayers(tournamentName, roleFilter=["Top", "Jungle", "Mid", "Bot", "Support"], thumbnailRedirect=False):
     argsString = _formatArgs(tournamentName, "T.Name")
     url = PLAYERS_URL.format(argsString)
     playersJson = requests.get(url).json()["cargoquery"]
+    roles = set(roleFilter)
     
     players = []
     for i in range(len(playersJson)):
         playerJson = playersJson[i]["title"]
-        player = Player(playerJson["Player"], playerJson["Team"])
+        if playerJson["Role"] not in roles:
+            # filter roles
+            continue
+        player = Player(playerJson["Player"], playerJson["Team"], playerJson["Role"])
         player.thumbnail = PLAYER_THUMBNAIL_URL.format(playerJson["FileName"])
+        if thumbnailRedirect:
+            # get redirected (http 301) image
+            try:
+                redirect = requests.get(player.thumbnail)
+                player.thumbnail = redirect.history[-1].headers["Location"].split("/revision", 1)[0]
+            except:
+                continue
         players.append(player)
     return players
 
@@ -169,7 +182,7 @@ def _getGames(uniqueGames, retrieveImages=False):
             games.append(game)
             gameMap[uniqueGame] = game
 
-        player = Player(gameJson["Name"], gameJson["Team"])
+        player = Player(gameJson["Name"], gameJson["Team"], gameJson["Role"])
         player.thumbnail = PLAYER_THUMBNAIL_URL.format(gameJson["FileName"])
 
         scoreline = Scoreline(uniqueGame, player)

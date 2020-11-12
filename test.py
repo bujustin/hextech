@@ -49,6 +49,14 @@ class TestSum(unittest.TestCase):
         player = players[0]
         self.assertIsInstance(player, hextech.Player)
 
+    def testGetPlayersRedirect(self):
+        players = hextech.getPlayers(tournamentName="LCK 2020 Spring", roleFilter=["Mid"], thumbnailRedirect=True)
+        self.assertTrue(len(players) > 0)
+
+        player = players[0]
+        self.assertIsInstance(player, hextech.Player)
+        self.assertTrue(player.role, "Mid")
+
     """ ddragon.py tests """
 
     def testGetChampionThumbnail(self):
