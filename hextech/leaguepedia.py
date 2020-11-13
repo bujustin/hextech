@@ -1,6 +1,7 @@
 import re
 import json
 import requests
+import sys
 
 from . import ddragon
 from .classes import *
@@ -50,6 +51,10 @@ def getPlayers(tournamentName, roleFilter=["Top", "Jungle", "Mid", "Bot", "Suppo
             try:
                 redirect = requests.get(player.thumbnail)
                 player.thumbnail = redirect.history[-1].headers["Location"].split("/revision", 1)[0]
+                # print progress
+                sys.stdout.write("\r")
+                sys.stdout.write("getting thumbnail {}/{}".format(i+1, len(playersJson)))
+                sys.stdout.flush()
             except:
                 continue
         players.append(player)
