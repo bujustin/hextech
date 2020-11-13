@@ -17,8 +17,8 @@ class Tournament:
     def getTeams(self):
         return leaguepedia.getTeams(self.name)
 
-    def getPlayers(self):
-        return leaguepedia.getPlayers(self.name)
+    def getPlayers(self, roleFilter=["Top", "Jungle", "Mid", "Bot", "Support"], thumbnailRedirect=False):
+        return leaguepedia.getPlayers(self.name, roleFilter, thumbnailRedirect)
 
 class Match:
     def __init__(self, _uniqueMatch):
