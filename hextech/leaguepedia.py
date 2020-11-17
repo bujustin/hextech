@@ -53,7 +53,7 @@ def getPlayers(tournamentName, roleFilter=["Top", "Jungle", "Mid", "Bot", "Suppo
                 player.thumbnail = redirect.history[-1].headers["Location"].split("/revision", 1)[0]
                 # print progress
                 sys.stdout.write("\r")
-                sys.stdout.write("getting thumbnail {}/{}".format(i+1, len(playersJson)))
+                sys.stdout.write("getting player thumbnail {}/{}".format(i+1, len(playersJson)))
                 sys.stdout.flush()
             except:
                 continue
@@ -196,6 +196,7 @@ def _getGames(uniqueGames, retrieveImages=False):
         scoreline.kills = int(gameJson["Kills"])
         scoreline.deaths = int(gameJson["Deaths"])
         scoreline.assists = int(gameJson["Assists"])
+        scoreline.kp = (scoreline.kills + scoreline.assists) / float(gameJson["TeamKills"])
         scoreline.gold = int(gameJson["Gold"])
         scoreline.cs = int(gameJson["CS"])
         scoreline.summonerSpells = gameJson["SummonerSpells"].split(",")

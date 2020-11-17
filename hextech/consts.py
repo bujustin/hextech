@@ -87,38 +87,39 @@ Params:
     Where clause filtering by SG.UniqueGame
 Game data format (json)
 {
-    "UniqueGame":"LCK/2020 Season/Summer Season/Scoreboards/Week 8_4_1",
-    "Gamename":"Game 1",
-    "DateTime UTC":"2020-08-07 11:20:00",
-    "Gamelength":"32:18",
-    "MatchHistory":"http://matchhistory.na.leagueoflegends.com/en/#match-details/ESPORTSTMNT02/1413537?gameHash=5dd2b153945ea73e",
-    "Winner":"2",
-    "Team1":"KT Rolster",
-    "Team2":"Hanwha Life Esports",
-    "Team1Bans":"Galio,Kalista,Sett,Camille,Kennen",
-    "Team2Bans":"Karma,Zoe,Jayce,Twisted Fate,LeBlanc",
-    "Name":"CuVee",
-    "Team":"Hanwha Life Esports",
-    "Role":"Top",
-    "Champion":"Gangplank",
-    "Kills":"6",
-    "Deaths":"1",
-    "Assists":"5",
-    "Gold":"16582",
-    "CS":"311",
-    "SummonerSpells":
-    "Teleport,Flash",
-    "Items":"Control Ward,Infinity Edge,Essence Reaver,Trinity Force,Boots of Swiftness,Sterak's Gage",
-    "KeystoneRune":"Grasp of the Undying",
-    "FileName":"GEN CuVee 2019 Split 2.png",
-    "DateTime UTC__precision":"0"}
+    UniqueGame: "LCK/2020 Season/Spring Season/Scoreboards/Week 9_5_1"
+    Gamename: "Game 1"
+    DateTime UTC: "2020-04-16 09:10:00"
+    Gamelength: "25:12"
+    MatchHistory: "http://matchhistory.na.leagueoflegends.com/en/#match-details/ESPORTSTMNT03/1351837?gameHash=8d4b64e0e36ce417"
+    Winner: "1"
+    Team1: "DragonX"
+    Team2: "APK Prince"
+    Team1Bans: "Illaoi,Trundle,Kalista,Miss Fortune,Ezreal"
+    Team2Bans: "Sett,Varus,Senna,Nautilus,Volibear"
+    Name: "ikssu"
+    Team: "APK Prince"
+    Role: "Top"
+    Role Number: "1"
+    Champion: "Ornn"
+    Kills: "1"
+    Deaths: "3"
+    Assists: "2"
+    Gold: "8284"
+    CS: "203"
+    TeamKills: "7"
+    SummonerSpells: "Teleport,Flash"
+    Items: "Refillable Potion,Null-Magic Mantle,Mercury's Treads,Doran's Shield,Infernal Mask,Forgefire Cape"
+    KeystoneRune: "Unsealed Spellbook"
+    FileName: "APK ikssu 2020 Split 1.png"
+    DateTime UTC__precision: "0"
 }
 """
 GAMES_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
     &tables=ScoreboardGames=SG,ScoreboardPlayers=SP,PlayerImages=PI
     &fields=SG.UniqueGame,SG.Gamename,SG.DateTime_UTC,SG.Gamelength,SG.MatchHistory,
     SG.Winner,SG.Team1,SG.Team2,SG.Team1Bans,SG.Team2Bans,
-    SP.Name,SP.Team,SP.Role,SP.Role_Number,SP.Champion,SP.Kills,SP.Deaths,SP.Assists,SP.Gold,SP.CS,SP.SummonerSpells,SP.Items,SP.KeystoneRune,PI.FileName
+    SP.Name,SP.Team,SP.Role,SP.Role_Number,SP.Champion,SP.Kills,SP.Deaths,SP.Assists,SP.Gold,SP.CS,SP.TeamKills,SP.SummonerSpells,SP.Items,SP.KeystoneRune,PI.FileName
     &where={}
     &join_on=SG.UniqueGame=SP.UniqueGame,SP.Link=PI.Link
     &order_by=SG.UniqueGame ASC,SP.Team,SP.Role_Number ASC

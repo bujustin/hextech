@@ -136,6 +136,7 @@ champion: str
 kills: int
 deaths: int
 assists: int
+kp: float
 gold: int
 cs: int
 summonerSpells: List[str]

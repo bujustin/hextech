@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="hextech",
-    version="1.0.6",
+    version="1.0.7",
     author="bujustin",
     author_email="bujustin@gmail.com",
     description="A Python framework for accessing League of Legends esports data",

@@ -71,6 +71,7 @@ class Scoreline:
         self.kills = 0
         self.deaths = 0
         self.assists = 0
+        self.kp = 0
         self.gold = 0
         self.cs = 0
 
