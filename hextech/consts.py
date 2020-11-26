@@ -29,19 +29,17 @@ Params:
     Leaguepedia tournament name
 Team data format (json)
 {
-    "Team1":"DragonX"
+    "Team1":"APK Prince",
+    "TeamName":"SeolHaeOne Prince",
+    "Short":"SP"
 }
 """
 TEAMS_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
-    &tables=ScoreboardGames=SG
-    &fields=SG.Team1
+    &tables=ScoreboardGames=SG,TeamRedirects=TR,Teams=T
+    &fields=SG.Team1,TR._pageName=TeamName,T.Short
     &where={}
+    &join_on=SG.Team1=TR.AllName,TR._pageName=T._pageName
     &group_by=SG.Team1"""
-
-TEAM_REDIRECT_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
-    &tables=TeamRedirects=TR
-    &fields=TR._pageName=TeamName
-    &where=TR.AllName='{}'"""
 
 """
 Params:
@@ -129,7 +127,7 @@ GAMES_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&l
 Params:
     FileName provided in game data object
 """
-PLAYER_THUMBNAIL_URL = "https://lol.gamepedia.com/Special:Redirect/file/{}"
+LEAGUEPEDIA_THUMBNAIL_URL = "https://lol.gamepedia.com/Special:Redirect/file/{}"
 
 DDRAGON_VERSIONS_URL = "https://ddragon.leagueoflegends.com/api/versions.json"
 

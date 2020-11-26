@@ -42,15 +42,15 @@ class TestSum(unittest.TestCase):
         teams = hextech.getTeams(tournamentName="LCK 2020 Spring")
         self.assertTrue(len(teams) == 10)
 
+        team = teams[0]
+        self.assertIsInstance(team, hextech.Team)
+
+        teamsMap = hextech.getTeams(tournamentName="LCK 2020 Spring", isMapped=True)
+        self.assertTrue(len(teamsMap) == 10)
+        self.assertTrue(teamsMap["APK Prince"]["short"] == "SP")
+
     def testGetPlayers(self):
-        players = hextech.getPlayers(tournamentName="LCK 2020 Spring")
-        self.assertTrue(len(players) > 0)
-
-        player = players[0]
-        self.assertIsInstance(player, hextech.Player)
-
-    def testGetPlayersRedirect(self):
-        players = hextech.getPlayers(tournamentName="LCK 2020 Spring", roleFilter=["Mid"], thumbnailRedirect=True)
+        players = hextech.getPlayers(tournamentName="LCK 2020 Spring", roleFilter=["Mid"])
         self.assertTrue(len(players) > 0)
 
         player = players[0]
@@ -64,9 +64,9 @@ class TestSum(unittest.TestCase):
         self.assertIsInstance(aatroxThumbnail, str)
 
     def testGetItemThumbnail(self):
-        items = "Blade of the Ruined King,Corrupting Potion,Broken Stopwatch,Mercury's Treads,Sterak's Gage,Trinity Force".split(",")
+        items = "Blade of The Ruined King,Corrupting Potion,Broken Stopwatch,Mercury's Treads,Sterak's Gage,Trinity Force".split(",")
         itemThumbnails = hextech.getItemThumbnail(items)
-        self.assertIsInstance(itemThumbnails["Blade of the Ruined King"], str)
+        self.assertIsInstance(itemThumbnails["Trinity Force"], str)
 
     def testGetChampionThumbnail(self):
         flashThumbnail = hextech.getSummonerSpellThumbnail("Flash")

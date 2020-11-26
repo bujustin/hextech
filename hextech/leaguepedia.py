@@ -45,7 +45,7 @@ def getPlayers(tournamentName, roleFilter=["Top", "Jungle", "Mid", "Bot", "Suppo
             # filter roles
             continue
         player = Player(playerJson["Player"], playerJson["Team"], playerJson["Role"])
-        player.thumbnail = PLAYER_THUMBNAIL_URL.format(playerJson["FileName"])
+        player.thumbnail = LEAGUEPEDIA_THUMBNAIL_URL.format(playerJson["FileName"])
         if thumbnailRedirect:
             # get redirected (http 301) image
             try:
@@ -63,17 +63,34 @@ def getPlayers(tournamentName, roleFilter=["Top", "Jungle", "Mid", "Bot", "Suppo
 """
 Params:
     tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+    isMapped: Bool : (optional) if true, instead return a dictionary with team names (as they were during the tournament) as the keys
+    thumbnailRedirect: Bool : (optional) if true, get redirected url for team image
 Returns:
-    List[str] : list of team names in tournament
+    List[Team]
 """
-def getTeams(tournamentName):
+def getTeams(tournamentName, isMapped=False, thumbnailRedirect=False):
     argsString = _formatArgs(tournamentName, "SG.Tournament")
     url = TEAMS_URL.format(argsString)
     teamsJson = requests.get(url).json()["cargoquery"]
 
-    teams = []
+    teams = {} if isMapped else []
     for i in range(len(teamsJson)):
-        teams.append(teamsJson[i]["title"]["Team1"])
+        teamJson = teamsJson[i]["title"]
+        team = Team(teamJson["TeamName"], teamJson["Short"])
+        team.thumbnail = LEAGUEPEDIA_THUMBNAIL_URL.format("_".join(teamJson["TeamName"].split()) + "logo_square.png")
+        if thumbnailRedirect:
+            # get redirected (http 301) image
+            try:
+                redirect = requests.get(team.thumbnail)
+                player.thumbnail = redirect.history[-1].headers["Location"].split("/revision", 1)[0]
+                # print progress
+                sys.stdout.write("\r")
+                sys.stdout.write("getting team thumbnail {}/{}".format(i+1, len(teamsJson)))
+                sys.stdout.flush()
+            except:
+                continue
+        if isMapped: teams[teamJson["Team1"]] = vars(team) 
+        else: teams.append(team)
     return teams
 
 """
@@ -188,7 +205,7 @@ def _getGames(uniqueGames, retrieveImages=False):
             gameMap[uniqueGame] = game
 
         player = Player(gameJson["Name"], gameJson["Team"], gameJson["Role"])
-        player.thumbnail = PLAYER_THUMBNAIL_URL.format(gameJson["FileName"])
+        player.thumbnail = LEAGUEPEDIA_THUMBNAIL_URL.format(gameJson["FileName"])
 
         scoreline = Scoreline(uniqueGame, player)
         scoreline.role = gameJson["Role"]

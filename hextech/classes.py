@@ -94,3 +94,12 @@ class Player:
 
     def __str__(self):
         return "{} {}".format(self.team, self.name)
+
+class Team:
+    def __init__(self, name, short):
+        self.name = name
+        self.short = short
+        self.thumbnail = None
+
+    def __str__(self):
+        return self.short

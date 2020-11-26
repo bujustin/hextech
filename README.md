@@ -56,6 +56,8 @@ getPlayers(
 
 getTeams(
 	tournamentName: str/List[str]/Tuple(str) # required
+	isMapped: Bool # optional
+    thumbnailRedirect: Bool # optional
 ) -> List[str]
 
 getTournaments(
@@ -170,6 +172,10 @@ Added getTeams() and getPlayers() functionality.
 ### v1.0.5 - 11/12/2020
 
 Added roleFilter and thumbnailRedirect parameters and functionality to getPlayers(). Added role field to player class.
+
+### v1.0.8 - 11/25/2020
+
+Added Team class. Modified getTeams() to return short name and thumbnail. Added isMapped and thumbnailRedirect parameters to getTeams().
 
 ## Disclaimer
 
