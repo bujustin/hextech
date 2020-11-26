@@ -14,8 +14,8 @@ class Tournament:
     def getMatches(self):
         return leaguepedia.getMatches(tournamentName=self.name)
 
-    def getTeams(self):
-        return leaguepedia.getTeams(self.name)
+    def getTeams(self, isMapped=False, thumbnailRedirect=False):
+        return leaguepedia.getTeams(self.name, isMapped, thumbnailRedirect)
 
     def getPlayers(self, roleFilter=["Top", "Jungle", "Mid", "Bot", "Support"], thumbnailRedirect=False):
         return leaguepedia.getPlayers(self.name, roleFilter, thumbnailRedirect)

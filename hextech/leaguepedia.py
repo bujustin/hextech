@@ -82,7 +82,7 @@ def getTeams(tournamentName, isMapped=False, thumbnailRedirect=False):
             # get redirected (http 301) image
             try:
                 redirect = requests.get(team.thumbnail)
-                player.thumbnail = redirect.history[-1].headers["Location"].split("/revision", 1)[0]
+                team.thumbnail = redirect.history[-1].headers["Location"].split("/revision", 1)[0]
                 # print progress
                 sys.stdout.write("\r")
                 sys.stdout.write("getting team thumbnail {}/{}".format(i+1, len(teamsJson)))
