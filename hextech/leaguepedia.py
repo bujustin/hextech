@@ -44,7 +44,7 @@ def getPlayers(tournamentName, roleFilter=["Top", "Jungle", "Mid", "Bot", "Suppo
         if playerJson["Role"] not in roles:
             # filter roles
             continue
-        player = Player(playerJson["Player"], playerJson["Team"], playerJson["Role"])
+        player = Player(playerJson["ID"], playerJson["Team"], playerJson["Role"])
         player.thumbnail = LEAGUEPEDIA_THUMBNAIL_URL.format(playerJson["FileName"])
         if thumbnailRedirect:
             # get redirected (http 301) image

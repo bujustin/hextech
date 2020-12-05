@@ -177,6 +177,10 @@ Added roleFilter and thumbnailRedirect parameters and functionality to getPlayer
 
 Added Team class. Modified getTeams() to return short name and thumbnail. Added isMapped and thumbnailRedirect parameters to getTeams().
 
+### v1.0.10 - 12/5/2020
+
+Modified getPlayers() to return player ID instead of player name (`Viper` vs `Viper (Park Do-hyeon)`).
+
 ## Disclaimer
 
 Hextech isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.

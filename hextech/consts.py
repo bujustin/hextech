@@ -11,16 +11,17 @@ Params:
     Leaguepedia tournament name
 Player data format (json)
 {
-    "Team":"T1"
-    "Player":"Teddy"
-    "FileName":"SKT Teddy 2019 Split 2.png"
+    Team: "SeolHaeOne Prince"
+    Role: "Bot"
+    FileName: "SP Trigger 2020 Split 2.png"
+    ID: "Trigger"
 }
 """
 PLAYERS_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
-    &tables=Tournaments=T,TournamentPlayers=TP,PlayerImages=PI
-    &fields=TP.Team,TP.Player,TP.Role,PI.FileName
+    &tables=Tournaments=T,TournamentPlayers=TP,PlayerImages=PI,PlayerRedirects=PR
+    &fields=TP.Team,PR.ID,TP.Role,PI.FileName
     &where={}
-    &join_on=T.OverviewPage=TP.OverviewPage,TP.Link=PI.Link
+    &join_on=T.OverviewPage=TP.OverviewPage,TP.Link=PI.Link,TP.Player=PR.AllName
     &order_by=PI.FileName DESC
     &group_by=TP.Player"""
 
