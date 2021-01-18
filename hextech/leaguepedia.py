@@ -24,15 +24,15 @@ Tuples will apply AND to filter elements (this is useful for applying tournament
 e.g. tournamentDate=(">2019-08-21", "<=2019-12-01") will return tournaments with dates between 2019-08-21 AND 2019-12-01
 """
 
-"""
-Params:
-    tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
-    roleFilter: List[str] : (optional) list of player roles to include
-    thumbnailRedirect: Bool : (optional) if true, get redirected url for player image
-Returns:
-    List[Player] : list of players in tournament
-"""
 def getPlayers(tournamentName, roleFilter=["Top", "Jungle", "Mid", "Bot", "Support"], thumbnailRedirect=False):
+    """
+    Params:
+        tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+        roleFilter: List[str] : (optional) list of player roles to include
+        thumbnailRedirect: Bool : (optional) if true, get redirected url for player image
+    Returns:
+        List[Player] : list of players in tournament
+    """
     argsString = _formatArgs(tournamentName, "T.Name")
     url = PLAYERS_URL.format(argsString)
     playersJson = requests.get(url).json()["cargoquery"]
@@ -60,15 +60,15 @@ def getPlayers(tournamentName, roleFilter=["Top", "Jungle", "Mid", "Bot", "Suppo
         players.append(player)
     return players
 
-"""
-Params:
-    tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
-    isMapped: Bool : (optional) if true, instead return a dictionary with team names (as they were during the tournament) as the keys
-    thumbnailRedirect: Bool : (optional) if true, get redirected url for team image
-Returns:
-    List[Team]
-"""
 def getTeams(tournamentName, isMapped=False, thumbnailRedirect=False):
+    """
+    Params:
+        tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+        isMapped: Bool : (optional) if true, instead return a dictionary with team names (as they were during the tournament) as the keys
+        thumbnailRedirect: Bool : (optional) if true, get redirected url for team image
+    Returns:
+        List[Team]
+    """
     argsString = _formatArgs(tournamentName, "SG.Tournament")
     url = TEAMS_URL.format(argsString)
     teamsJson = requests.get(url).json()["cargoquery"]
@@ -93,15 +93,40 @@ def getTeams(tournamentName, isMapped=False, thumbnailRedirect=False):
         else: teams.append(team)
     return teams
 
-"""
-Params:
-    tournamentLeague: str/List[str]/Tuple(str) : filter by leagues to get tournaments from (e.g. LCS, LCK)
-    tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
-    tournamentDate: str/List[str]/Tuple(str) : date in the format of yyyy-mm-dd
-Returns:
-    Dict[str -> Tournament] : dictionary of tournament names mapped to tournament objects
-"""
+def getMatchSchedule(tournamentName):
+    """
+    Params:
+        tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+    Returns:
+        Dict[str -> Dict[frozenset -> Dict]]
+    """
+    argsString = _formatArgs(tournamentName, "MS.ShownName")
+    url = MATCH_SCHEDULE_URL.format(argsString)
+    schedulesJson = requests.get(url).json()["cargoquery"]
+
+    matchScheduleMap = {}
+    for i in range(len(schedulesJson)):
+        scheduleJson = schedulesJson[i]["title"]
+        date, time = scheduleJson["DateTime UTC"].split()
+        if date not in matchScheduleMap: matchScheduleMap[date] = {}
+
+        key = frozenset([scheduleJson["Team1"], scheduleJson["Team2"]])
+        matchScheduleMap[date][key] = {
+            "time": time,
+            "bestOf": scheduleJson["BestOf"],
+            "week": scheduleJson["Tab"]
+        }
+    return matchScheduleMap
+
 def getTournaments(tournamentLeague=DEFAULT_LEAGUES, tournamentName=None, tournamentDate=None):
+    """
+    Params:
+        tournamentLeague: str/List[str]/Tuple(str) : filter by leagues to get tournaments from (e.g. LCS, LCK)
+        tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+        tournamentDate: str/List[str]/Tuple(str) : date in the format of yyyy-mm-dd
+    Returns:
+        Dict[str -> Tournament] : dictionary of tournament names mapped to tournament objects
+    """
     argsString = " AND ".join(filter(None, [
         _formatArgs(tournamentLeague, "L.League_Short"),
         _formatArgs(tournamentName, "T.Name"),
@@ -121,16 +146,16 @@ def getTournaments(tournamentLeague=DEFAULT_LEAGUES, tournamentName=None, tourna
 
     return tournaments
 
-"""
-Params:
-    tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
-    matchDate: str/List[str]/Tuple(str) : date in the format of yyyy-mm-dd
-    matchPatch: str/List[str]/Tuple(str) : game patch the match is played on (e.g. 10.15)
-    matchTeam: str/List[str]/Tuple(str)
-Returns:
-    List[Match]
-"""
 def getMatches(tournamentName=None, matchDate=None, matchPatch=None, matchTeam=None):
+    """
+    Params:
+        tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
+        matchDate: str/List[str]/Tuple(str) : date in the format of yyyy-mm-dd
+        matchPatch: str/List[str]/Tuple(str) : game patch the match is played on (e.g. 10.15)
+        matchTeam: str/List[str]/Tuple(str)
+    Returns:
+        List[Match]
+    """
     argsString = " AND ".join(filter(None, [
         _formatArgs(tournamentName, "SG.Tournament"),
         _formatDateTimeArgs(matchDate, "SG.DateTime_UTC"),
@@ -173,14 +198,14 @@ def getMatches(tournamentName=None, matchDate=None, matchPatch=None, matchTeam=N
 
     return matches
 
-"""
-Params:
-    uniqueGames: List[str] : list of strings indicating games to retrieve
-    retrieveImages: Bool : indicates whether to retrieve spells, items, runes images from data dragon
-Returns:
-    List[Game] : list of game objects retrieved
-"""
 def _getGames(uniqueGames, retrieveImages=False):
+    """
+    Params:
+        uniqueGames: List[str] : list of strings indicating games to retrieve
+        retrieveImages: Bool : indicates whether to retrieve spells, items, runes images from data dragon
+    Returns:
+        List[Game] : list of game objects retrieved
+    """
     url = GAMES_URL.format(_formatArgs(uniqueGames, "SG.UniqueGame"))
     gamesJson = requests.get(url).json()["cargoquery"]
 
@@ -234,14 +259,14 @@ def _getGames(uniqueGames, retrieveImages=False):
 
     return games
 
-"""
-Params:
-    args: str/List[str]/Tuple(str)
-    prefix: str
-Returns:
-    str : args formatted to be used for leaguepedia query
-"""
 def _formatArgs(args, prefix):
+    """
+    Params:
+        args: str/List[str]/Tuple(str)
+        prefix: str
+    Returns:
+        str : args formatted to be used for leaguepedia query
+    """
     if args == None: return None
     delim = " OR "
     if isinstance(args, list): pass
@@ -258,15 +283,15 @@ def _formatArgs(args, prefix):
 
     return "(" + delim.join(formatArg(arg) for arg in args) + ")"
 
-"""
-Helper function to change date strings to datetime strings when formating args
-Params:
-    dateArgs: str/List[str]/Tuple(str) : date args in the format of yyyy-mm-dd
-    prefix: str
-Returns:
-    str : date args in the format of yyyy-mm-dd hh:mm:ss
-"""
 def _formatDateTimeArgs(dateArgs, prefix):
+    """
+    Helper function to change date strings to datetime strings when formating args
+    Params:
+        dateArgs: str/List[str]/Tuple(str) : date args in the format of yyyy-mm-dd
+        prefix: str
+    Returns:
+        str : date args in the format of yyyy-mm-dd hh:mm:ss
+    """
     if dateArgs == None: return None
     delim = " OR "
     if isinstance(dateArgs, list): pass

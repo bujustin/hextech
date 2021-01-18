@@ -44,6 +44,25 @@ TEAMS_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&l
 
 """
 Params:
+    Leaguepedia tournament name
+Match schedule data format (json)
+{
+    DateTime UTC    "2021-01-13 08:00:00"
+    Team1   "Gen.G"
+    Team2   "KT Rolster"
+    BestOf  "3"
+    Tab "Week 1"
+    DateTime UTC__precision "0"
+}
+"""
+MATCH_SCHEDULE_URL = """https://lol.gamepedia.com/api.php?action=cargoquery&format=json&limit=500
+    &tables=MatchSchedule=MS
+    &fields=MS.DateTime_UTC,MS.Team1,MS.Team2,MS.BestOf,MS.Tab
+    &where={}
+    &order_by=MS.DateTime_UTC ASC"""
+
+"""
+Params:
     Where clause filtering by L.League_Short
 Tournament data format (json)
 {

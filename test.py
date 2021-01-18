@@ -38,24 +38,38 @@ class TestSum(unittest.TestCase):
         player = scoreline.player
         self.assertIsInstance(player, hextech.Player)
 
-    def testGetTeams(self):
-        teams = hextech.getTeams(tournamentName="LCK 2020 Spring")
-        self.assertTrue(len(teams) == 10)
-
-        team = teams[0]
-        self.assertIsInstance(team, hextech.Team)
-
-        teamsMap = hextech.getTeams(tournamentName="LCK 2020 Spring", isMapped=True)
-        self.assertTrue(len(teamsMap) == 10)
-        self.assertTrue(teamsMap["APK Prince"]["short"] == "SP")
-
     def testGetPlayers(self):
         players = hextech.getPlayers(tournamentName="LCK 2020 Spring", roleFilter=["Mid"])
         self.assertTrue(len(players) > 0)
 
         player = players[0]
         self.assertIsInstance(player, hextech.Player)
-        self.assertTrue(player.role, "Mid")
+        self.assertEqual(player.role, "Mid")
+
+    def testGetTeams(self):
+        teams = hextech.getTeams(tournamentName="LCK 2020 Spring")
+        self.assertEqual(len(teams), 10)
+
+        team = teams[0]
+        self.assertIsInstance(team, hextech.Team)
+
+        teamsMap = hextech.getTeams(tournamentName="LCK 2020 Spring", isMapped=True)
+        self.assertEqual(len(teamsMap), 10)
+        self.assertEqual(teamsMap["APK Prince"]["short"], "SP")
+
+    def testGetMatchSchedule(self):
+        matchSchedule = hextech.getMatchSchedule(tournamentName="LCK 2020 Spring")
+        
+        date = "2020-02-05"
+        self.assertTrue(date in matchSchedule)
+
+        teams = frozenset(["DAMWON Gaming", "T1"])
+        self.assertTrue(teams in matchSchedule[date])
+        
+        teamSet = set()
+        for teams in matchSchedule[date].keys():
+            teamSet.update(teams)
+        self.assertTrue("T1" in teamSet)
 
     """ ddragon.py tests """
 

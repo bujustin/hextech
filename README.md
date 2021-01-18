@@ -26,6 +26,8 @@ for match in matches:
 
 Objects of the following classes are meant to be read-only; they are automatically instantiated by methods such as tournament.getMatches() and match.getGames().
 
+Note: All date times are in UTC
+
 ### Functions
 
 The definitions of the framework's base functions. The functions take in parameters that act as filters for data selection. Some filters are required while others are optional. More detailed descriptions of the filters can be found in the source code.
@@ -60,6 +62,10 @@ getTeams(
     thumbnailRedirect: Bool # optional
 ) -> List[str]
 
+getMatchSchedule(
+	tournamentName: str/List[str]/Tuple(str) # required
+) -> Dict
+
 getTournaments(
 	tournamentLeague: str/List[str]/Tuple(str), # optional (if not specified, use default leagues)
 	tournamentName: str/List[str]/Tuple(str), # optional
@@ -86,6 +92,7 @@ league: str
 getMatches() -> Dict[str -> <a href="https://github.com/bujustin/hextech#match-class">Match</a>]
 getTeams() -> List[str]
 getPlayers() -> List[<a href="https://github.com/bujustin/hextech#player-class">Player</a>]
+getMatchSchedule() -> Dict
 </pre>
 
 ### Match Class
@@ -180,6 +187,10 @@ Added Team class. Modified getTeams() to return short name and thumbnail. Added 
 ### v1.0.10 - 12/5/2020
 
 Modified getPlayers() to return player ID instead of player name (`Viper` vs `Viper (Park Do-hyeon)`).
+
+### v1.0.11 - 1/17/2021
+
+Added getMatchSchedule() functionality.
 
 ## Disclaimer
 
