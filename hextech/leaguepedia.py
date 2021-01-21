@@ -98,25 +98,23 @@ def getMatchSchedule(tournamentName):
     Params:
         tournamentName: str/List[str]/Tuple(str) : filter by tournament names (e.g. LCK 2020 Spring)
     Returns:
-        Dict[str -> Dict[frozenset -> Dict]]
+        List[Dict]
     """
     argsString = _formatArgs(tournamentName, "MS.ShownName")
     url = MATCH_SCHEDULE_URL.format(argsString)
     schedulesJson = requests.get(url).json()["cargoquery"]
 
-    matchScheduleMap = {}
+    matchSchedule = []
     for i in range(len(schedulesJson)):
         scheduleJson = schedulesJson[i]["title"]
-        date, time = scheduleJson["DateTime UTC"].split()
-        if date not in matchScheduleMap: matchScheduleMap[date] = {}
-
-        key = frozenset([scheduleJson["Team1"], scheduleJson["Team2"]])
-        matchScheduleMap[date][key] = {
-            "time": time,
+        matchSchedule.append({
+            "dateTime": scheduleJson["DateTime UTC"],
+            "teams": (scheduleJson["Team1"], scheduleJson["Team2"]),
             "bestOf": scheduleJson["BestOf"],
             "week": scheduleJson["Tab"]
-        }
-    return matchScheduleMap
+        })
+
+    return matchSchedule
 
 def getTournaments(tournamentLeague=DEFAULT_LEAGUES, tournamentName=None, tournamentDate=None):
     """

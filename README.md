@@ -64,7 +64,7 @@ getTeams(
 
 getMatchSchedule(
 	tournamentName: str/List[str]/Tuple(str) # required
-) -> Dict
+) -> List[Dict]
 
 getTournaments(
 	tournamentLeague: str/List[str]/Tuple(str), # optional (if not specified, use default leagues)
@@ -92,7 +92,7 @@ league: str
 getMatches() -> Dict[str -> <a href="https://github.com/bujustin/hextech#match-class">Match</a>]
 getTeams() -> List[str]
 getPlayers() -> List[<a href="https://github.com/bujustin/hextech#player-class">Player</a>]
-getMatchSchedule() -> Dict
+getMatchSchedule() -> List[Dict]
 </pre>
 
 ### Match Class

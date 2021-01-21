@@ -59,17 +59,24 @@ class TestSum(unittest.TestCase):
 
     def testGetMatchSchedule(self):
         matchSchedule = hextech.getMatchSchedule(tournamentName="LCK 2020 Spring")
-        
-        date = "2020-02-05"
-        self.assertTrue(date in matchSchedule)
 
-        teams = frozenset(["DAMWON Gaming", "T1"])
-        self.assertTrue(teams in matchSchedule[date])
-        
-        teamSet = set()
-        for teams in matchSchedule[date].keys():
-            teamSet.update(teams)
-        self.assertTrue("T1" in teamSet)
+        matchScheduleMap = {}
+        for scheduledMatch in matchSchedule:
+            date, time = scheduledMatch["dateTime"].split()
+            if date not in matchScheduleMap: matchScheduleMap[date] = {}
+
+            for i in range(2):
+                teamName = scheduledMatch["teams"][i]
+                if teamName not in matchScheduleMap[date]: matchScheduleMap[date][teamName] = []
+                matchScheduleMap[date][teamName].append(scheduledMatch["teams"][1-i])
+
+        date = "2020-02-05"
+        self.assertTrue(date in matchScheduleMap)
+
+        team1 = "DAMWON Gaming"
+        team2 = "T1"
+        self.assertTrue(team1 in matchScheduleMap[date] and team2 in matchScheduleMap[date])
+        self.assertTrue(team2 in matchScheduleMap[date][team1])
 
     """ ddragon.py tests """
 
